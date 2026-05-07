@@ -1,5 +1,5 @@
 import { Box, Text } from "@opentui/core";
-import { init, Button, Input, tokens } from "../index";
+import { init, Button, Input, Textarea, tokens } from "../index";
 
 const renderer = await init({ exitOnCtrlC: true });
 
@@ -48,18 +48,89 @@ const inputSection = Box(
             id: "d-row",
             label: "Row:",
             placeholder: "label left",
-            labelDirection: "row",
+            labelDirection: "column",
         }),
         Input({
             id: "d-col",
             label: "Column:",
             placeholder: "label above",
             labelDirection: "column",
+            defaultValue: "owais",
+        }),
+    ),
+);
+
+// ── textareas ────────────────────────────────────────────
+const textareaSection = Box(
+    {
+        flexDirection: "column",
+        rowGap: 1,
+        padding: 2,
+        backgroundColor: tokens.colors.bg,
+    },
+
+    Text({ content: "Textareas", fg: tokens.colors.text }),
+
+    Text({ content: "Label direction", fg: tokens.colors.dim }),
+    Box(
+        { flexDirection: "column", rowGap: 1 },
+        Textarea({
+            id: "ta-row",
+            label: "Row:",
+            labelDirection: "column",
+            placeholder: "label left",
+            width: 50,
+            height: 4,
+        }),
+        Textarea({
+            id: "ta-col",
+            label: "Column:",
+            labelDirection: "column",
+            defaultValue: "multi-line\nvalue",
+            width: 50,
+            height: 4,
+        }),
+    ),
+
+    Text({ content: "Wrap mode", fg: tokens.colors.dim }),
+    Box(
+        { flexDirection: "column", rowGap: 1 },
+        Textarea({
+            id: "ta-word",
+            label: "Word:",
+            labelDirection: "row",
+            wrapMode: "word",
+            defaultValue: "Word wrap keeps whole words together.",
+            width: 50,
+            height: 4,
+        }),
+        Textarea({
+            id: "ta-char",
+            label: "Char:",
+            labelDirection: "row",
+            wrapMode: "char",
+            defaultValue: "Char wrap breaks lines at any character.",
+            width: 50,
+            height: 4,
+        }),
+        Textarea({
+            id: "ta-none",
+            label: "None:",
+            labelDirection: "row",
+            wrapMode: "none",
+            defaultValue: "No wrap keeps long lines unbroken.",
+            width: 50,
+            height: 4,
         }),
     ),
 );
 
 // ── root ─────────────────────────────────────────────────
 renderer.root.add(
-    Box({ flexDirection: "column" }, buttonSection, inputSection),
+    Box(
+        { flexDirection: "column" },
+        buttonSection,
+        inputSection,
+        textareaSection,
+    ),
 );
