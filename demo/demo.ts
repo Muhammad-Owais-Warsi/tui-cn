@@ -1,21 +1,29 @@
-import { Box, Text } from "@opentui/core";
-import { init, Button, Input, Textarea, tokens } from "../index";
+import { Box, ScrollBox, Text } from "@opentui/core";
+import { init, Button, Input, Select, Textarea, tokens } from "../index";
+import { Checkbox } from "../ui/checkbox";
 
 const renderer = await init({ exitOnCtrlC: true });
 
+const sectionBase = {
+    flexDirection: "column",
+    rowGap: tokens.spacing.stackGap,
+    padding: tokens.spacing.sectionPadding,
+    backgroundColor: tokens.colors.bg,
+    border: true,
+    borderStyle: "single",
+    borderColor: tokens.colors.border,
+} as const;
+
 const buttonSection = Box(
     {
-        flexDirection: "column",
-        rowGap: 1,
-        padding: 2,
-        backgroundColor: tokens.colors.bg,
+        ...sectionBase,
     },
 
     Text({ content: "Buttons", fg: tokens.colors.text }),
 
     Text({ content: "Variants", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "row", columnGap: 2 },
+        { flexDirection: "row", columnGap: tokens.spacing.stackGap * 2 },
         Button({ label: "default" }),
         Button({ label: "secondary", variant: "secondary" }),
         Button({ label: "destructive", variant: "destructive" }),
@@ -25,7 +33,7 @@ const buttonSection = Box(
 
     Text({ content: "Sizes", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "row", columnGap: 2 },
+        { flexDirection: "row", columnGap: tokens.spacing.stackGap * 2 },
         Button({ label: "sm", size: "sm" }),
         Button({ label: "md", size: "md" }),
         Button({ label: "lg", size: "lg" }),
@@ -35,20 +43,18 @@ const buttonSection = Box(
 // ── inputs ───────────────────────────────────────────────
 const inputSection = Box(
     {
-        flexDirection: "column",
-        rowGap: 1,
-        padding: 2,
-        backgroundColor: tokens.colors.bg,
+        ...sectionBase,
     },
 
+    Text({ content: "Inputs", fg: tokens.colors.text }),
     Text({ content: "Label direction", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "column", rowGap: 1 },
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
         Input({
             id: "d-row",
             label: "Row:",
             placeholder: "label left",
-            labelDirection: "column",
+            labelDirection: "row",
         }),
         Input({
             id: "d-col",
@@ -63,21 +69,18 @@ const inputSection = Box(
 // ── textareas ────────────────────────────────────────────
 const textareaSection = Box(
     {
-        flexDirection: "column",
-        rowGap: 1,
-        padding: 2,
-        backgroundColor: tokens.colors.bg,
+        ...sectionBase,
     },
 
     Text({ content: "Textareas", fg: tokens.colors.text }),
 
     Text({ content: "Label direction", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "column", rowGap: 1 },
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
         Textarea({
             id: "ta-row",
             label: "Row:",
-            labelDirection: "column",
+            labelDirection: "row",
             placeholder: "label left",
             width: 50,
             height: 4,
@@ -94,7 +97,7 @@ const textareaSection = Box(
 
     Text({ content: "Wrap mode", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "column", rowGap: 1 },
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
         Textarea({
             id: "ta-word",
             label: "Word:",
@@ -125,12 +128,96 @@ const textareaSection = Box(
     ),
 );
 
-// ── root ─────────────────────────────────────────────────
-renderer.root.add(
+// ── select ───────────────────────────────────────────────
+const selectOptions = [
+    {
+        name: "Alacritty",
+        description: "GPU-accelerated terminal",
+        value: "alacritty",
+    },
+    {
+        name: "iTerm2",
+        description: "macOS terminal emulator",
+        value: "iterm2",
+    },
+    {
+        name: "WezTerm",
+        description: "Rust-based terminal",
+        value: "wezterm",
+    },
+    {
+        name: "Hyper",
+        description: "Electron terminal",
+        value: "hyper",
+    },
+];
+
+const selectSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Select", fg: tokens.colors.text }),
+
+    Text({ content: "Label direction", fg: tokens.colors.dim }),
     Box(
-        { flexDirection: "column" },
-        buttonSection,
-        inputSection,
-        textareaSection,
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
+        Select({
+            id: "sel-row",
+            label: "Row:",
+            labelDirection: "row",
+            options: selectOptions,
+            width: 40,
+            height: 6,
+            showDescription: true,
+        }),
+        Select({
+            id: "sel-col",
+            label: "Column:",
+            labelDirection: "column",
+            options: selectOptions,
+            width: 40,
+            height: 6,
+            showDescription: false,
+            showScrollIndicator: true,
+        }),
+    ),
+);
+
+const check = Checkbox({
+    id: "text",
+    label: "test",
+});
+
+// ── root ─────────────────────────────────────────────────
+const page = Box(
+    {
+        flexDirection: "column",
+        rowGap: tokens.spacing.stackGap,
+        padding: tokens.spacing.sectionPadding,
+        backgroundColor: tokens.colors.bg,
+    },
+    buttonSection,
+    inputSection,
+    textareaSection,
+    selectSection,
+    check,
+);
+
+renderer.root.add(
+    ScrollBox(
+        {
+            width: "100%",
+            height: "100%",
+            scrollY: true,
+            backgroundColor: tokens.colors.bg,
+            scrollbarOptions: {
+                trackOptions: {
+                    foregroundColor: tokens.colors.primary,
+                    backgroundColor: tokens.colors.surface,
+                },
+            },
+        },
+        page,
     ),
 );
