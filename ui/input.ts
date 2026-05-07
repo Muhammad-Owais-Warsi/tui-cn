@@ -1,19 +1,81 @@
-import { InputRenderable, type InputRenderableOptions } from "@opentui/core";
-import { renderer } from "../lib/renderer";
-import { theme, type Theme } from "../lib/theme";
+import { Box, Text, Input as TuiInput, delegate } from "@opentui/core";
+import { tokens } from "../lib/theme";
 
-type InputVariantConfig = {
-    backgroundColor: string;
-    focusedBackgroundColor: string;
-    textColor: string;
-    focusedTextColor: string;
-    placeholderColor: string;
+export type InputVariant = "default" | "ghost";
+export type InputSize = "sm" | "md" | "lg";
+export type LabelDirection = "row" | "column";
+
+export interface InputProps {
+    id: string;
+    label?: string;
+    labelDirection?: LabelDirection;
+    placeholder?: string;
+    variant?: InputVariant;
+    size?: InputSize;
+}
+
+const variantMap: Record<
+    InputVariant,
+    {
+        textColor: string;
+        backgroundColor: string;
+        focusedBackgroundColor: string;
+        cursorColor: string;
+    }
+> = {
+    default: {
+        textColor: tokens.colors.text,
+        backgroundColor: tokens.colors.surface,
+        focusedBackgroundColor: "#222222",
+        cursorColor: tokens.colors.primary,
+    },
+    ghost: {
+        textColor: tokens.colors.dim,
+        backgroundColor: "transparent",
+        focusedBackgroundColor: "transparent",
+        cursorColor: tokens.colors.dim,
+    },
 };
 
-export function Input(props) {
-    return new InputRenderable(renderer, {
-        width: 24,
-        placeholder: props.placeholder,
-        cursorColor: theme.colors.ring,
-    });
+const sizeMap: Record<InputSize, { width: number }> = {
+    sm: { width: 16 },
+    md: { width: 24 },
+    lg: { width: 32 },
+};
+
+export function Input({
+    id,
+    label,
+    labelDirection = "row",
+    placeholder = "",
+    variant = "default",
+    size = "md",
+}: InputProps) {
+    const v = variantMap[variant];
+    const sz = sizeMap[size];
+
+    return delegate(
+        { focus: `${id}-input` },
+        Box(
+            {
+                flexDirection: labelDirection,
+                columnGap: 1,
+                marginBottom: 1,
+                alignItems:
+                    labelDirection === "column" ? "flex-start" : "center",
+            },
+            ...(label
+                ? [Text({ content: label.padEnd(12), fg: tokens.colors.dim })]
+                : []),
+            TuiInput({
+                id: `${id}-input`,
+                placeholder,
+                width: sz.width,
+                textColor: v.textColor,
+                backgroundColor: v.backgroundColor,
+                focusedBackgroundColor: v.focusedBackgroundColor,
+                cursorColor: v.cursorColor,
+            }),
+        ),
+    );
 }
