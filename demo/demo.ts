@@ -1,5 +1,14 @@
 import { Box, ScrollBox, Text } from "@opentui/core";
-import { init, Button, Input, Select, Textarea, tokens } from "../index";
+import {
+    init,
+    Button,
+    Input,
+    Select,
+    Slider,
+    TabSelect,
+    Textarea,
+    tokens,
+} from "../index";
 import { Checkbox } from "../ui/checkbox";
 
 const renderer = await init({ exitOnCtrlC: true });
@@ -184,10 +193,123 @@ const selectSection = Box(
     ),
 );
 
-const check = Checkbox({
-    id: "text",
-    label: "test",
-});
+// ── tab select ───────────────────────────────────────────
+const tabSelectOptions = [
+    {
+        name: "General",
+        description: "Core settings",
+        value: "general",
+    },
+    {
+        name: "Editor",
+        description: "Font and layout",
+        value: "editor",
+    },
+    {
+        name: "Theme",
+        description: "Colors and style",
+        value: "theme",
+    },
+    {
+        name: "Keymap",
+        description: "Shortcuts",
+        value: "keymap",
+    },
+];
+
+const tabSelectSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Tab Select", fg: tokens.colors.text }),
+
+    Text({ content: "Label direction", fg: tokens.colors.dim }),
+    Box(
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
+        TabSelect({
+            id: "tab-row",
+            label: "Row:",
+            labelDirection: "row",
+            options: tabSelectOptions,
+            width: 50,
+            height: 5,
+            showDescription: true,
+            showUnderline: true,
+        }),
+        TabSelect({
+            id: "tab-col",
+            label: "Column:",
+            labelDirection: "column",
+            options: tabSelectOptions,
+            width: 50,
+            height: 5,
+            showDescription: false,
+            showScrollIndicator: true,
+        }),
+    ),
+);
+
+// ── slider ───────────────────────────────────────────────
+const sliderSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Slider", fg: tokens.colors.text }),
+
+    Text({ content: "Orientation", fg: tokens.colors.dim }),
+    Box(
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
+        Slider({
+            id: "sl-h",
+            label: "Horizontal:",
+            labelDirection: "row",
+            orientation: "horizontal",
+            min: 0,
+            max: 100,
+            defaultValue: 35,
+            width: 40,
+        }),
+        Slider({
+            id: "sl-v",
+            label: "Vertical:",
+            labelDirection: "column",
+            orientation: "vertical",
+            min: 0,
+            max: 10,
+            defaultValue: 4,
+            height: 6,
+            width: 2,
+        }),
+    ),
+);
+
+// ── checkbox ────────────────────────────────────────────
+const checkboxSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Checkbox", fg: tokens.colors.text }),
+
+    Box(
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
+        Checkbox({
+            id: "chk-news",
+            label: "Subscribe to newsletter",
+            checked: true,
+        }),
+        Checkbox({
+            id: "chk-terms",
+            label: "Accept terms and conditions",
+        }),
+        Checkbox({
+            id: "chk-updates",
+            label: "Receive product updates",
+        }),
+    ),
+);
 
 // ── root ─────────────────────────────────────────────────
 const page = Box(
@@ -201,7 +323,9 @@ const page = Box(
     inputSection,
     textareaSection,
     selectSection,
-    check,
+    tabSelectSection,
+    sliderSection,
+    checkboxSection,
 );
 
 renderer.root.add(

@@ -5,7 +5,6 @@ import { tokens } from "../lib/theme";
 type CheckboxProps = {
     id: string;
     label: string;
-    value: any;
     checked?: boolean;
     onChange?: (checked: boolean) => void;
 };
@@ -13,7 +12,6 @@ type CheckboxProps = {
 export function Checkbox({
     id,
     label,
-    value,
     checked = false,
     onChange,
 }: CheckboxProps) {
@@ -42,9 +40,6 @@ export function Checkbox({
         content: label,
         fg: tokens.components.label.color,
     });
-
-    if (onChange) {
-    }
 
     const toggle = () => {
         checked = !checked;

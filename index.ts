@@ -11,3 +11,6 @@ export { Input, InputField } from "./ui/input";
 export { Textarea, TextareaField } from "./ui/textarea";
 
 export { Select, SelectField } from "./ui/select";
+export { TabSelect, TabSelectField } from "./ui/tab-select";
+
+export { Slider, SliderField } from "./ui/slider";
