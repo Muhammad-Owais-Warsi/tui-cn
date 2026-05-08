@@ -1,4 +1,4 @@
-import { Checkbox } from "./ui/checkbox";
+export { Checkbox } from "./ui/checkbox";
 
 export { init, getRenderer } from "./lib/renderer";
 export { tokens } from "./lib/theme";

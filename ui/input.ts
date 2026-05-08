@@ -40,7 +40,7 @@ const variantMap: Record<
 > = {
     default: {
         textColor: tokens.components.field.text,
-        backgroundColor: tokens.components.field.background,
+        backgroundColor: tokens.components.field.focusedBackground,
         focusedBackgroundColor: tokens.components.field.focusedBackground,
         cursorColor: tokens.components.field.cursor,
         placeholderColor: tokens.components.field.placeholder,
@@ -90,6 +90,8 @@ export function Input({
         id: `${id}-input`,
         placeholder,
         width: width,
+        justifyContent: "center",
+        alignItems: "center",
         textColor: v.textColor,
         backgroundColor: v.backgroundColor,
         focusedBackgroundColor: v.focusedBackgroundColor,
