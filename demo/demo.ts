@@ -7,6 +7,7 @@ import {
     Slider,
     TabSelect,
     Textarea,
+    Badge,
     tokens,
 } from "../index";
 import { Checkbox } from "../ui/checkbox";
@@ -285,6 +286,22 @@ const sliderSection = Box(
     ),
 );
 
+// ── badge ───────────────────────────────────────────────
+const badgeSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Badge", fg: tokens.colors.text }),
+
+    Box(
+        { flexDirection: "row", columnGap: tokens.spacing.stackGap },
+        Badge({ id: "badge-new", label: "New" }),
+        Badge({ id: "badge-beta", label: "Beta" }),
+        Badge({ id: "badge-pro", label: "Pro" }),
+    ),
+);
+
 // ── checkbox ────────────────────────────────────────────
 const checkboxSection = Box(
     {
@@ -325,6 +342,7 @@ const page = Box(
     selectSection,
     tabSelectSection,
     sliderSection,
+    badgeSection,
     checkboxSection,
 );
 
