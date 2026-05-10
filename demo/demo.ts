@@ -1,4 +1,4 @@
-import { Box, ScrollBox, Text } from "@opentui/core";
+import { Box, ScrollBox, Text, SyntaxStyle, RGBA } from "@opentui/core";
 import {
     init,
     Button,
@@ -8,6 +8,7 @@ import {
     TabSelect,
     Textarea,
     Badge,
+    Code,
     tokens,
 } from "../index";
 import { Checkbox } from "../ui/checkbox";
@@ -50,7 +51,6 @@ const buttonSection = Box(
     ),
 );
 
-// ── inputs ───────────────────────────────────────────────
 const inputSection = Box(
     {
         ...sectionBase,
@@ -287,6 +287,38 @@ const sliderSection = Box(
 );
 
 // ── badge ───────────────────────────────────────────────
+const codeSyntax = SyntaxStyle.fromStyles({
+    keyword: { fg: RGBA.fromHex("#FF7B72"), bold: true },
+    string: { fg: RGBA.fromHex("#A5D6FF") },
+    comment: { fg: RGBA.fromHex("#8B949E"), italic: true },
+    number: { fg: RGBA.fromHex("#79C0FF") },
+    function: { fg: RGBA.fromHex("#D2A8FF") },
+    default: { fg: RGBA.fromHex("#E6EDF3") },
+});
+
+const codeSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Code", fg: tokens.colors.text }),
+
+    Code({
+        id: "code-sample",
+        content: `function greet(name: string) {
+  // Demo sample
+  const message = "Hello, " + name
+  return message
+}
+
+greet("OpenTUI")`,
+        fileType: "typescript",
+        syntaxStyle: codeSyntax,
+        width: 60,
+        height: 8,
+    }),
+);
+
 const badgeSection = Box(
     {
         ...sectionBase,
@@ -342,6 +374,7 @@ const page = Box(
     selectSection,
     tabSelectSection,
     sliderSection,
+    codeSection,
     badgeSection,
     checkboxSection,
 );

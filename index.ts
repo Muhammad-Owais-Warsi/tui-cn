@@ -16,3 +16,4 @@ export { TabSelect, TabSelectField } from "./ui/tab-select";
 export { Slider, SliderField } from "./ui/slider";
 
 export { Badge } from "./ui/badge";
+export { Code } from "./ui/code";
