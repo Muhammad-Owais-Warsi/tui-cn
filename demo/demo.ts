@@ -316,6 +316,7 @@ greet("OpenTUI")`,
         syntaxStyle: codeSyntax,
         width: 60,
         height: 8,
+        lineNumber: true,
     }),
 );
 

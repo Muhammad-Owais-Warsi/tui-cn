@@ -1,12 +1,5 @@
-import {
-    Box,
-    ScrollBox,
-    Text,
-    SyntaxStyle,
-    RGBA,
-    TreeSitterClient,
-} from "@opentui/core";
-import { Code, Select, init, tokens } from "../index";
+import { Box, ScrollBox, Text, SyntaxStyle, RGBA } from "@opentui/core";
+import { Checkbox, Code, Select, init, tokens } from "../index";
 
 const renderer = await init({ exitOnCtrlC: true });
 
@@ -96,8 +89,21 @@ const codeBlock = Code({
     syntaxStyle: snippet!.syntaxStyle,
     width: 60,
     height: 10,
+    lineNumber: true,
 });
 
+const lineNumberToggle = Checkbox({
+    id: "snippet-lines",
+    label: "Show line numbers",
+    checked: true,
+    onChange: (checked) => {
+        if (codeBlock.lineNumbers) {
+            codeBlock.lineNumbers.showLineNumbers = checked;
+            codeBlock.lineNumbers.requestRender();
+        }
+        codeBlock.requestRender();
+    },
+});
 const languageSelect = Select({
     id: "snippet-language",
     label: "Language",
@@ -111,9 +117,9 @@ const languageSelect = Select({
         const key = option.value as string;
         const next = codeSamples[key];
         if (!next) return;
-        codeBlock.filetype = next.filetype;
-        codeBlock.content = next.content;
-        codeBlock.syntaxStyle = next.syntaxStyle; // ← was commented out
+        codeBlock.code.filetype = next.filetype;
+        codeBlock.code.content = next.content;
+        codeBlock.code.syntaxStyle = next.syntaxStyle;
         codeBlock.requestRender();
     },
 });
@@ -133,6 +139,7 @@ const card = Box(
     Text({ content: "Code Snippet", fg: tokens.colors.text }),
     Text({ content: "Choose a language to preview.", fg: tokens.colors.dim }),
     languageSelect,
+    lineNumberToggle,
     codeBlock,
 );
 
@@ -158,5 +165,3 @@ renderer.root.add(
         page,
     ),
 );
-
-languageSelect.focus();
