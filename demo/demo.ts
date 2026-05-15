@@ -9,6 +9,7 @@ import {
     Textarea,
     Badge,
     Code,
+    Toast,
     tokens,
 } from "../index";
 import { Checkbox } from "../ui/checkbox";
@@ -335,6 +336,42 @@ const badgeSection = Box(
     ),
 );
 
+// ── toast ──────────────────────────────────────────────
+const toastSection = Box(
+    {
+        ...sectionBase,
+    },
+
+    Text({ content: "Toast", fg: tokens.colors.text }),
+
+    Box(
+        { flexDirection: "column", rowGap: tokens.spacing.stackGap },
+        Toast({
+            id: "toast-default",
+            content: "Default toast",
+
+            with: 10,
+        }),
+        Toast({
+            id: "toast-success",
+            content: "Success toast",
+
+            variant: "success",
+        }),
+        Toast({
+            id: "toast-warning",
+            content: "Warning toast",
+
+            variant: "warning",
+        }),
+        Toast({
+            id: "toast-danger",
+            content: "Danger toast",
+            variant: "danger",
+        }),
+    ),
+);
+
 // ── checkbox ────────────────────────────────────────────
 const checkboxSection = Box(
     {
@@ -377,6 +414,7 @@ const page = Box(
     sliderSection,
     codeSection,
     badgeSection,
+    toastSection,
     checkboxSection,
 );
 
